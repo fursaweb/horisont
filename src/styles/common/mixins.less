@@ -1,0 +1,245 @@
+.responsive(@max-width, @rules) {
+  @media only screen and (max-width: @max-width) {
+	@rules();
+  }
+}
+
+.responsive-height(@min-height, @max-height, @rules) {
+  @media only screen and (min-height: @min-height) and (max-height: @max-height) {
+	@rules();
+  }
+}
+
+.responsive-height(@max-height, @rules) {
+  @media only screen and (max-height: @max-height) {
+	@rules();
+  }
+}
+
+.responsive-min(@min-width, @rules) {
+    @min-width-less: @min-width;
+    @media only screen and (min-width: @min-width-less) {
+        @rules();
+    }
+}
+
+.responsive(@max-width, @min-width, @rules) {
+  @media only screen and (min-width: @min-width) and (max-width: @max-width) {
+	@rules();
+  }
+}
+
+.portrait(@rules) {
+    @media screen and (orientation: portrait) {
+        @rules();
+    }
+}
+
+.landscape(@rules) {
+    @media screen and (orientation: landscape) and (max-width: 568px) {
+        @rules();
+    }
+}
+
+.phone(@rules) {
+  .responsive(@max-width-mobile, @rules);
+}
+
+.mobile(@rules) {
+  .responsive(@max-width-tablet, @rules);
+}
+
+.tablet(@rules) {
+  .responsive(@max-width-tablet, @min-width-tablet, @rules);
+}
+
+.pc(@rules) {
+  @media only screen and (min-width: @min-width-pc) {
+	@rules();
+  }
+}
+
+.hide-block-middle(@rules) {
+  @media only screen and (max-width: @max-width-middle-screen) {
+    .hide-block-middle {
+      @rules();
+    }
+  }
+}
+
+.animation(@rule) {
+  -webkit-animation: @rule;
+  animation: @rule;
+}
+
+.font-size(@sizeValue) {
+  @remValue: @sizeValue;
+  @pxValue: (@sizeValue * 14);
+  font-size: ~"@{pxValue}px";
+  font-size: ~"@{remValue}rem";
+}
+
+.font-size-px(@size-value) {
+  @remValue: (@size-value/16.2162162);
+  @pxValue: @size-value;
+  font-size: ~"@{pxValue}px";
+  font-size: ~"@{remValue}rem";
+}
+
+.font-size-responsive(@size-value) {
+	font-size: @size-value;
+	.mobile({
+		font-size: @size-value + 3;
+	});
+}
+
+.empty() {
+  height: 0;
+  line-height: 0;
+  font-size: 0;
+}
+
+.clear-block() {
+  &:after {
+	content: '';
+	display: block;
+	clear: both;
+	.empty;
+  }
+}
+
+.clickable() {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+.placeholder(@rules) {
+  &::-webkit-input-placeholder { @rules();
+  }
+  &::-moz-placeholder { @rules();
+  }
+  &:-moz-placeholder { @rules();
+  }
+  &:-ms-input-placeholder { @rules();
+  }
+}
+
+.m-center() {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.menu-btn(@color, @w, @h, @d) {
+  & {
+    color: @color;
+    background-color: @color;
+  }
+  &, &:before, &:after {
+	height: @h;
+	width: @w;
+	transition: .2s all;
+	border-radius: 5px;
+  }
+
+  &:before, &:after {
+	content: "";
+    background-color: currentColor;
+	display: block;
+	position: absolute;
+  }
+  &:before {
+	top: -@d;
+  }
+  &:after {
+	bottom: -@d;
+  }
+}
+
+.not-touch-interface(@rules) {
+	body:not(.touch-interface) & {
+		@rules();
+	}
+}
+
+.touch-interface(@rules) {
+	body.touch-interface & {
+		@rules();
+	}
+}
+
+.if-ie(@rules) {
+	@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+		@rules();
+	}
+}
+
+.for(@list, @code) {
+	& {
+		.loop(@i:1) when (@i =< length(@list)) {
+			@value: extract(@list, @i);
+			
+			@code();
+			
+			.loop(@i + 1);
+		}
+		.loop(0);
+	}
+}
+
+.body-center(@center-id, @rules) {
+	.for(@center-id, {
+		body.center-body-@{value} & {
+			@rules();
+		}
+	});
+}
+
+//постой цикл
+.foreach(@iteration, @code) {
+    .looper(@i:1) when (@i =< @iteration) {
+        @code();
+        .looper(@i + 1);
+    }
+    .looper(1);
+}
+
+.loop(@count, @rules) {
+	.foreach(@count, {
+		@rules();
+	});
+}
+
+.loop-steps(@iteration, @start-point, @code) {
+
+    .myLoop (@i) when (@i <= (@iteration * @iteration)) {
+
+        @code();
+
+        .myLoop(@i + @iteration);
+    }
+    .myLoop (@start-point);
+}
+
+.grid-justify-sw(@max-width, @count, @margin: .5%) {
+	@sw-width: (100%-(2*@margin*@count))/@count;
+	@media only screen and (max-width: @max-width) {
+		> .sw {
+			width: @sw-width;
+		}
+	}
+}
+
+.unselectable() {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
